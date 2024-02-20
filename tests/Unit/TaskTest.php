@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use App\Exceptions\Task\TaskWrongEndTimeException;
-use App\Exceptions\Task\TaskWrongTimeInputException;
+use App\Exceptions\Task\TaskWrongTimeNoEndTime;
 use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -60,9 +60,21 @@ class TaskTest extends TestCase
         $task->save();
     }
 
+    public function test_create_task_with_no_start_and__finish(): void
+    {
+        $this->expectException(TaskWrongEndTimeException::class);
+
+        $task = new Task();
+        $task->title = 'Test Task';
+        $task->description = 'This is a test task';
+        $task->date = Carbon::create(2024, 2, 20);
+        $task->setEndTime( Carbon::createFromFormat('H:i:s', '08:00:00'));
+        $task->save();
+    }
+
     public function test_create_task_with_start_and_without_finish(): void
     {
-        $this->expectException(TaskWrongTimeInputException::class);
+        $this->expectException(TaskWrongTimeNoEndTime::class);
 
         $task = new Task();
         $task->title = 'Test Task';

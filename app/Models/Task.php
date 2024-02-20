@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Exceptions\Task\TaskWrongEndTimeException;
-use App\Exceptions\Task\TaskWrongTimeInputException;
+use App\Exceptions\Task\TaskWrongTimeNoEndTime;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,7 +25,7 @@ class Task extends Model
         parent::boot();
         self::creating(function ($model) {
             if ($model->start_time && !$model->end_time) {
-                throw new TaskWrongTimeInputException();
+                throw new TaskWrongTimeNoEndTime();
             }
             if ($model->start_time && $model->end_time) {
                 if ($model->end_time->lt($model->start_time)) {
