@@ -16,7 +16,7 @@ Before you begin, make sure you have the following components installed:
     ```
     - Go to the project folder:
     ```bash
-    cd planner-backend
+    cd planner_backend
     ```
     - Run the following command to start the application:
     ```bash
