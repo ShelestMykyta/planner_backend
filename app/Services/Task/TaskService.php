@@ -3,6 +3,7 @@
 namespace App\Services\Task;
 
 use App\Exceptions\Task\ErrorTaskCreatingException;
+use App\Exceptions\Task\ErrorTaskUpdatingException;
 use App\Models\Task;
 use Carbon\Carbon;
 
@@ -33,6 +34,35 @@ class TaskService
             return $task;
         } catch (\Exception $e) {
             throw new ErrorTaskCreatingException();
+        }
+    }
+
+    /**
+     * @throws ErrorTaskUpdatingException
+     */
+    public function update(array $taskData): Task
+    {
+        try {
+            $task = Task::where('id', $taskData['id'])->first();
+            $task->fill($taskData);
+
+            if ($taskData['start_time']) {
+                $task->setStartTime(
+                    Carbon::createFromFormat('H:i:s', $taskData['start_time'])
+                );
+            }
+
+            if ($taskData['end_time']) {
+                $task->setEndTime(
+                    Carbon::createFromFormat('H:i:s', $taskData['end_time'])
+                );
+            }
+
+            $task->save();
+
+            return $task;
+        } catch (\Exception $e) {
+            throw new ErrorTaskUpdatingException();
         }
     }
 }
