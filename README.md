@@ -7,7 +7,7 @@ Before you begin, make sure you have the following components installed:
 - Docker
 - Docker Compose
 
-## Інструкції з використання
+## Instructions for use
 
 1. Deployment instructions:
     - Clone the repository:
