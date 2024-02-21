@@ -29,6 +29,11 @@ RUN groupadd -g 1000 www
 
 RUN useradd -u 1000 -ms /bin/bash -g www www
 
+RUN yes | pecl install xdebug-3.3.1 \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini \
+
 COPY . /var/www
 
 WORKDIR /var/www
