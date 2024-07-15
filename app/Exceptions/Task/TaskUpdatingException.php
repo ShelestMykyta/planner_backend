@@ -2,7 +2,7 @@
 
 namespace App\Exceptions\Task;
 
-class ErrorTaskUpdatingException extends \Exception
+class TaskUpdatingException extends \Exception
 {
     public function __construct(string $message = 'Failed to update Task.', int $code = 400)
     {

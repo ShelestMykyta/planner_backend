@@ -2,7 +2,7 @@
 
 namespace App\Exceptions\Task;
 
-class ErrorTaskCreatingException extends \Exception
+class TaskCreatingException extends \Exception
 {
     public function __construct()
     {

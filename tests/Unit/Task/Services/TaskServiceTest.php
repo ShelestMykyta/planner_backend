@@ -2,8 +2,8 @@
 
 namespace Tests\Unit\Task\Services;
 
-use App\Exceptions\Task\ErrorTaskCreatingException;
-use App\Exceptions\Task\ErrorTaskUpdatingException;
+use App\Exceptions\Task\TaskCreatingException;
+use App\Exceptions\Task\TaskUpdatingException;
 use App\Exceptions\Task\TaskWrongEndTimeException;
 use App\Models\Task;
 use App\Services\Task\TaskService;
@@ -40,7 +40,7 @@ class TaskServiceTest extends TestCase
 
     public function test_unsuccessful_create_task_with_exception(): void
     {
-        $this->expectException(ErrorTaskCreatingException::class);
+        $this->expectException(TaskCreatingException::class);
 
         $taskService = new TaskService();
 
@@ -86,7 +86,7 @@ class TaskServiceTest extends TestCase
 
     public function test_unsuccessful_update_when_task_not_exist(): void
     {
-        $this->expectException(ErrorTaskUpdatingException::class);
+        $this->expectException(TaskUpdatingException::class);
         $this->expectExceptionMessage('Task is not exist');
         $this->expectExceptionCode(404);
 

@@ -2,8 +2,8 @@
 
 namespace App\Services\Task;
 
-use App\Exceptions\Task\ErrorTaskCreatingException;
-use App\Exceptions\Task\ErrorTaskUpdatingException;
+use App\Exceptions\Task\TaskCreatingException;
+use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
 use Carbon\Carbon;
 
@@ -11,7 +11,7 @@ class TaskService
 {
 
     /**
-     * @throws ErrorTaskCreatingException
+     * @throws TaskCreatingException
      */
     public function create(array $taskData): Task
     {
@@ -33,19 +33,19 @@ class TaskService
 
             return $task;
         } catch (\Exception $e) {
-            throw new ErrorTaskCreatingException();
+            throw new TaskCreatingException();
         }
     }
 
     /**
-     * @throws ErrorTaskUpdatingException
+     * @throws TaskUpdatingException
      */
     public function update(array $taskData): Task
     {
         $task = Task::where('id', $taskData['id'])->first();
 
         if (!$task) {
-            throw ErrorTaskUpdatingException::taskNotExist();
+            throw TaskUpdatingException::taskNotExist();
         }
 
         $task->fill($taskData);
