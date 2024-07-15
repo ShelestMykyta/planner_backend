@@ -2,6 +2,7 @@
 
 namespace Tests\Unit\Task\Models;
 
+use App\Exceptions\Task\TaskTimeException;
 use App\Exceptions\Task\TaskWrongEndTimeException;
 use App\Exceptions\Task\TaskWrongTimeNoEndTime;
 use App\Models\Task;
@@ -49,7 +50,8 @@ class TaskTest extends TestCase
 
     public function test_create_task_with_start_and_wrong_finish(): void
     {
-        $this->expectException(TaskWrongEndTimeException::class);
+        $this->expectException(TaskTimeException::class);
+        $this->expectExceptionMessage('Finish time must be after start time');
 
         $task = new Task();
         $task->title = 'Test Task';
@@ -62,7 +64,9 @@ class TaskTest extends TestCase
 
     public function test_create_task_with_no_start_and__finish(): void
     {
-        $this->expectException(TaskWrongEndTimeException::class);
+        $this->expectException(TaskTimeException::class);
+        $this->expectExceptionMessage('Finish time must be after start time');
+        $this->expectExceptionCode(400);
 
         $task = new Task();
         $task->title = 'Test Task';
@@ -74,7 +78,9 @@ class TaskTest extends TestCase
 
     public function test_create_task_with_start_and_without_finish(): void
     {
-        $this->expectException(TaskWrongTimeNoEndTime::class);
+        $this->expectException(TaskTimeException::class);
+        $this->expectExceptionMessage('Wrong time input. No end time.');
+        $this->expectExceptionCode(400);
 
         $task = new Task();
         $task->title = 'Test Task';

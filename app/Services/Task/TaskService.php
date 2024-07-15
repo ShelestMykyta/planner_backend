@@ -42,27 +42,28 @@ class TaskService
      */
     public function update(array $taskData): Task
     {
-        try {
-            $task = Task::where('id', $taskData['id'])->first();
-            $task->fill($taskData);
+        $task = Task::where('id', $taskData['id'])->first();
 
-            if ($taskData['start_time']) {
-                $task->setStartTime(
-                    Carbon::createFromFormat('H:i:s', $taskData['start_time'])
-                );
-            }
-
-            if ($taskData['end_time']) {
-                $task->setEndTime(
-                    Carbon::createFromFormat('H:i:s', $taskData['end_time'])
-                );
-            }
-
-            $task->save();
-
-            return $task;
-        } catch (\Exception $e) {
-            throw new ErrorTaskUpdatingException();
+        if (!$task) {
+            throw ErrorTaskUpdatingException::taskNotExist();
         }
+
+        $task->fill($taskData);
+
+        if ($taskData['start_time']) {
+            $task->setStartTime(
+                Carbon::createFromFormat('H:i:s', $taskData['start_time'])
+            );
+        }
+
+        if ($taskData['end_time']) {
+            $task->setEndTime(
+                Carbon::createFromFormat('H:i:s', $taskData['end_time'])
+            );
+        }
+
+        $task->save();
+
+        return $task;
     }
 }

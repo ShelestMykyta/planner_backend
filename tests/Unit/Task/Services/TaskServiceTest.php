@@ -4,6 +4,7 @@ namespace Tests\Unit\Task\Services;
 
 use App\Exceptions\Task\ErrorTaskCreatingException;
 use App\Exceptions\Task\ErrorTaskUpdatingException;
+use App\Exceptions\Task\TaskWrongEndTimeException;
 use App\Models\Task;
 use App\Services\Task\TaskService;
 use Carbon\Carbon;
@@ -83,18 +84,11 @@ class TaskServiceTest extends TestCase
         ]);
     }
 
-    public function test_unsuccessful_update_task_with_exception(): void
+    public function test_unsuccessful_update_when_task_not_exist(): void
     {
-        $task = new Task();
-        $task->id = 3;
-        $task->title = 'Test Task';
-        $task->description = 'This is a test task';
-        $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
-        $task->save();
-
         $this->expectException(ErrorTaskUpdatingException::class);
+        $this->expectExceptionMessage('Task is not exist');
+        $this->expectExceptionCode(404);
 
         $taskService = new TaskService();
         $updatedTask = $taskService->update([

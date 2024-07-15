@@ -4,8 +4,13 @@ namespace App\Exceptions\Task;
 
 class ErrorTaskUpdatingException extends \Exception
 {
-    public function __construct()
+    public function __construct(string $message = 'Failed to update Task.', int $code = 400)
     {
-        parent::__construct('Failed to update Task.');
+        parent::__construct($message, $code);
+    }
+
+    public static function taskNotExist(): self
+    {
+        return new self('Task is not exist', 404);
     }
 }
