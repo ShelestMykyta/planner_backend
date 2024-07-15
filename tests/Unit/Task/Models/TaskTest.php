@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Task;
+namespace Tests\Unit\Task\Models;
 
 use App\Exceptions\Task\TaskWrongEndTimeException;
 use App\Exceptions\Task\TaskWrongTimeNoEndTime;

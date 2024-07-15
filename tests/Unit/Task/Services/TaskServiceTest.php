@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\Task;
+namespace Tests\Unit\Task\Services;
 
 use App\Exceptions\Task\ErrorTaskCreatingException;
 use App\Exceptions\Task\ErrorTaskUpdatingException;
@@ -56,6 +56,7 @@ class TaskServiceTest extends TestCase
     public function test_successful_update_task(): void
     {
         $task = new Task();
+        $task->id = 2;
         $task->title = 'Test Task';
         $task->description = 'This is a test task';
         $task->date = Carbon::create(2024, 2, 20);
@@ -85,6 +86,7 @@ class TaskServiceTest extends TestCase
     public function test_unsuccessful_update_task_with_exception(): void
     {
         $task = new Task();
+        $task->id = 3;
         $task->title = 'Test Task';
         $task->description = 'This is a test task';
         $task->date = Carbon::create(2024, 2, 20);
