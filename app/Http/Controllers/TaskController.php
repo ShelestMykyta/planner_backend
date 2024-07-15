@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\Task\ErrorTaskCreatingException;
 use App\Http\Requests\CreateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Services\Task\TaskService;
-use Illuminate\Http\JsonResponse;
 
 class TaskController extends Controller
 {
