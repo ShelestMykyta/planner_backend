@@ -15,14 +15,11 @@ class TaskController extends Controller
 
     }
 
-    public function create(CreateTaskRequest $request): TaskResource|JsonResponse
+    public function create(CreateTaskRequest $request): TaskResource
     {
-        try {
-            $taskData = $request->all();
-            $task = $this->taskService->create($taskData);
-            return new TaskResource($task);
-        } catch (ErrorTaskCreatingException $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
-        }
+        $taskData = $request->all();
+        $task = $this->taskService->create($taskData);
+
+        return new TaskResource($task);
     }
 }
