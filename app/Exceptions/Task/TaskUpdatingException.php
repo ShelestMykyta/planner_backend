@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Task;
 
-class TaskUpdatingException extends \Exception
+use App\Exceptions\BaseException;
+
+class TaskUpdatingException extends BaseException
 {
     public function __construct(string $message = 'Failed to update Task.', int $code = 400)
     {

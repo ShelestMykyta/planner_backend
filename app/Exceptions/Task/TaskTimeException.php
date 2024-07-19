@@ -2,7 +2,9 @@
 
 namespace App\Exceptions\Task;
 
-class TaskTimeException extends \Exception
+use App\Exceptions\BaseException;
+
+class TaskTimeException extends BaseException
 {
     public function __construct(string $message = 'Wrong time', int $code = 400)
     {

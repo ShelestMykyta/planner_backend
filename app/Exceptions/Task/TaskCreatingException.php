@@ -2,10 +2,15 @@
 
 namespace App\Exceptions\Task;
 
-class TaskCreatingException extends \Exception
+use App\Exceptions\BaseException;
+use App\Exceptions\Render;
+
+class TaskCreatingException extends BaseException
 {
+    use Render;
+
     public function __construct()
     {
-        parent::__construct('Failed to create Task');
+        parent::__construct('Failed to create Task', 422);
     }
 }
