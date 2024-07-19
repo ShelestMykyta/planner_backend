@@ -39,8 +39,15 @@ class Task extends Model
         $this->start_time = $date;
     }
 
+    /**
+     * @throws TaskTimeException
+     */
     public function setEndTime(Carbon $date): void
     {
+        if (!isset($this->start_time)) {
+            throw TaskTimeException::wrongStartTime();
+        }
+
         if ($date->lt($this->start_time)) {
             throw TaskTimeException::wrongEndTime();
         }

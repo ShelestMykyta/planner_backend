@@ -9,6 +9,11 @@ class TaskTimeException extends \Exception
         parent::__construct($message, $code);
     }
 
+    public static function wrongStartTime(): self
+    {
+        return new self('Wrong start time');
+    }
+
     public static function wrongEndTime(): self
     {
         return new self('Finish time must be after start time');

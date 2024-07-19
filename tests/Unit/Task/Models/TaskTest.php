@@ -33,8 +33,8 @@ class TaskTest extends TestCase
         $task->title = 'Test Task';
         $task->description = 'This is a test task';
         $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
+        $task->setStartTime(Carbon::createFromFormat('H:i:s', '09:00:00'));
+        $task->setEndTime(Carbon::createFromFormat('H:i:s', '10:00:00'));
         $task->save();
 
         $this->assertDatabaseHas('tasks', [
@@ -60,10 +60,10 @@ class TaskTest extends TestCase
         $task->save();
     }
 
-    public function test_create_task_with_no_start_and__finish(): void
+    public function test_create_task_with_no_start_and_finish(): void
     {
         $this->expectException(TaskTimeException::class);
-        $this->expectExceptionMessage('Finish time must be after start time');
+        $this->expectExceptionMessage('Wrong start time');
         $this->expectExceptionCode(400);
 
         $task = new Task();
