@@ -2,6 +2,7 @@
 
 namespace App\Services\Task;
 
+use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
@@ -13,20 +14,19 @@ class TaskService
     /**
      * @throws TaskCreatingException
      */
-    public function create(array $taskData): Task
+    public function create(TaskDTO $taskDTO): Task
     {
         try {
             $task = new Task();
-
-            $task->title = $taskData['title'];
-            $task->description = $taskData['description'];
-            $task->date = new Carbon($taskData['date']);
+            $task->title = $taskDTO->title;
+            $task->description = $taskDTO->description;
+            $task->date = new Carbon($taskDTO->date);
 
             $task->setStartTime(
-                Carbon::createFromFormat('H:i:s', $taskData['start_time'])
+                Carbon::createFromFormat('H:i:s', $taskDTO->start_time)
             );
             $task->setEndTime(
-                Carbon::createFromFormat('H:i:s', $taskData['end_time'])
+                Carbon::createFromFormat('H:i:s', $taskDTO->end_time)
             );
 
             $task->save();
@@ -40,25 +40,25 @@ class TaskService
     /**
      * @throws TaskUpdatingException
      */
-    public function update(array $taskData): Task
+    public function update(TaskDTO $taskDTO): Task
     {
-        $task = Task::where('id', $taskData['id'])->first();
+        $task = Task::where('id', $taskDTO->id)->first();
 
         if (!$task) {
             throw TaskUpdatingException::taskNotExist();
         }
 
-        $task->fill($taskData);
+        $task->fill($taskDTO->toArray());
 
-        if ($taskData['start_time']) {
+        if ($taskDTO->start_time) {
             $task->setStartTime(
-                Carbon::createFromFormat('H:i:s', $taskData['start_time'])
+                Carbon::createFromFormat('H:i:s', $taskDTO->start_time)
             );
         }
 
-        if ($taskData['end_time']) {
+        if ($taskDTO->end_time) {
             $task->setEndTime(
-                Carbon::createFromFormat('H:i:s', $taskData['end_time'])
+                Carbon::createFromFormat('H:i:s', $taskDTO->end_time)
             );
         }
 

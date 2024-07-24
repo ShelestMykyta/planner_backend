@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Task\Services;
 
+use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
 use App\Exceptions\Task\TaskUpdatingException;
-use App\Exceptions\Task\TaskWrongEndTimeException;
 use App\Models\Task;
 use App\Services\Task\TaskService;
 use Carbon\Carbon;
@@ -19,13 +19,13 @@ class TaskServiceTest extends TestCase
     {
         $taskService = new TaskService();
 
-        $preparedData = [
-            'title' => 'Test Task',
-            'description' => 'This is a test task',
-            'date' => '2024-02-20',
-            'start_time' => '09:00:00',
-            'end_time' =>  '10:00:00'
-        ];
+        $preparedData = new TaskDTO(
+            title: 'Test Task',
+            description: 'This is a test task',
+            date: '2024-02-20',
+            start_time: '09:00:00',
+            end_time: '10:00:00'
+        );
 
         $task = $taskService->create($preparedData);
 
@@ -44,12 +44,13 @@ class TaskServiceTest extends TestCase
 
         $taskService = new TaskService();
 
-        $preparedData = [
-            'title' => 'Test Task',
-            'date' => '2024-02-20',
-            'start_time' => '09:00:00',
-            'end_time' =>  '08:00:00'
-        ];
+        $preparedData = new TaskDTO(
+            title: 'Test Task',
+            description: 1,
+            date: '2024-02-20',
+            start_time: '09:00:00',
+            end_time: '08:00:00'
+        );
 
         $taskService->create($preparedData);
     }
@@ -66,14 +67,17 @@ class TaskServiceTest extends TestCase
         $task->save();
 
         $taskService = new TaskService();
-        $updatedTask = $taskService->update([
-            'id' => 2,
-            'title' => 'Updated Task',
-            'description' => 'This is an updated test task',
-            'date' => '2024-02-21',
-            'start_time' => '10:00:00',
-            'end_time' =>  '11:00:00'
-        ]);
+
+        $updateData = new TaskDTO(
+            title: 'Updated Task',
+            description: 'This is an updated test task',
+            date: '2024-02-21',
+            start_time: '10:00:00',
+            end_time: '11:00:00',
+            id: 2
+        );
+
+        $updatedTask = $taskService->update($updateData);
 
         $this->assertDatabaseHas('tasks', [
             'title' => 'Updated Task',
@@ -91,11 +95,16 @@ class TaskServiceTest extends TestCase
         $this->expectExceptionCode(404);
 
         $taskService = new TaskService();
-        $updatedTask = $taskService->update([
-            'id' => 3,
-            'title' => 'Updated Task',
-            'start_time' => '10:00:00',
-            'end_time' =>  '08:00:00'
-        ]);
+
+        $updateTask = new TaskDTO(
+            title: 'Updated Task',
+            description: 123,
+            date: '2024-02-21',
+            start_time: '10:00:00',
+            end_time: '11:00:00',
+            id: 3
+        );
+
+        $updatedTask = $taskService->update($updateTask);
     }
 }
