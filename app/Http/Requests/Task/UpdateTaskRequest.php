@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Task;
 
+use App\Http\Requests\CustomRequest;
 use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Exceptions\HttpResponseException;
 
-class CreateTaskRequest extends FormRequest
+class UpdateTaskRequest extends CustomRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -49,17 +47,5 @@ class CreateTaskRequest extends FormRequest
             'end_time.required' => 'The end time field is required.',
             'end_time.date_format' => 'The end time must be in the format HH:MM:SS.',
         ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        $errors = $validator->errors();
-
-        $response = response()->json([
-            'message' => 'Invalid data send',
-            'details' => $errors->messages(),
-        ], 422);
-
-        throw new HttpResponseException($response);
     }
 }

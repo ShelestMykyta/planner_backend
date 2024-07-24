@@ -50,6 +50,10 @@ class TaskService
 
         $task->fill($taskDTO->toArray());
 
+        if ($taskDTO->date) {
+            $task->date = new Carbon($taskDTO->date);
+        }
+
         if ($taskDTO->start_time) {
             $task->setStartTime(
                 Carbon::createFromFormat('H:i:s', $taskDTO->start_time)
