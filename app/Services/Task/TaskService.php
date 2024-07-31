@@ -9,6 +9,7 @@ use App\Exceptions\Task\TaskException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class TaskService
 {
@@ -96,5 +97,10 @@ class TaskService
         }
 
         return $task;
+    }
+
+    public function getAll(): Collection
+    {
+        return Task::all();
     }
 }

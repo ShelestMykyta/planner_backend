@@ -11,6 +11,7 @@ use App\Http\Requests\Task\CreateTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Services\Task\TaskService;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 
 class TaskController extends Controller
@@ -76,5 +77,12 @@ class TaskController extends Controller
         $task = $this->taskService->getById($id);
 
         return new TaskResource($task);
+    }
+
+    public function getAll(): AnonymousResourceCollection
+    {
+        $tasks = $this->taskService->getAll();
+
+        return TaskResource::collection($tasks);
     }
 }
