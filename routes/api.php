@@ -21,4 +21,5 @@ Route::get('/health-check', function () {
 Route::prefix('tasks')->group(function () {
     Route::post('/', [\App\Http\Controllers\TaskController::class, 'create']);
     Route::put('/{id}', [\App\Http\Controllers\TaskController::class, 'update']);
+    Route::delete('/{id}', [\App\Http\Controllers\TaskController::class, 'delete']);
 });

@@ -4,10 +4,13 @@ namespace App\Http\Controllers;
 
 use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
+use App\Exceptions\Task\TaskDeletingException;
+use App\Exceptions\Task\TaskUpdatingException;
 use App\Http\Requests\Task\CreateTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
 use App\Http\Resources\TaskResource;
 use App\Services\Task\TaskService;
+use Illuminate\Http\Response;
 
 class TaskController extends Controller
 {
@@ -35,6 +38,9 @@ class TaskController extends Controller
     }
 
 
+    /**
+     * @throws TaskUpdatingException
+     */
     public function update(UpdateTaskRequest $request, int $id): TaskResource
     {
         $taskDTO = new TaskDTO(
@@ -49,5 +55,15 @@ class TaskController extends Controller
         $task = $this->taskService->update($taskDTO);
 
         return new TaskResource($task);
+    }
+
+    /**
+     * @throws TaskDeletingException
+     */
+    public function delete(int $id): Response
+    {
+        $this->taskService->delete($id);
+
+        return response()->noContent();
     }
 }
