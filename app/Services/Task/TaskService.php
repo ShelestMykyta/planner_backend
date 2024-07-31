@@ -13,10 +13,6 @@ use Illuminate\Database\Eloquent\Collection;
 
 class TaskService
 {
-
-    /**
-     * @throws TaskCreatingException
-     */
     public function create(TaskDTO $taskDTO): Task
     {
         try {
