@@ -2,10 +2,9 @@
 
 namespace App\Exceptions\Task;
 
-use App\Exceptions\BaseException;
 use App\Exceptions\Render;
 
-class TaskCreatingException extends BaseException
+class TaskCreatingException extends TaskException
 {
     use Render;
 

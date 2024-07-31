@@ -5,6 +5,7 @@ namespace App\Services\Task;
 use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
 use App\Exceptions\Task\TaskDeletingException;
+use App\Exceptions\Task\TaskException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
 use Carbon\Carbon;
@@ -84,5 +85,16 @@ class TaskService
         }
 
         $task->delete();
+    }
+
+    public function getById(int $id): Task
+    {
+        $task = Task::find($id);
+
+        if (!$task) {
+            throw TaskException::taskNotExist();
+        }
+
+        return $task;
     }
 }
