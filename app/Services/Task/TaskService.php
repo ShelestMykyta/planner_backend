@@ -4,6 +4,7 @@ namespace App\Services\Task;
 
 use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
+use App\Exceptions\Task\TaskDeletingException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
 use Carbon\Carbon;
@@ -69,5 +70,19 @@ class TaskService
         $task->save();
 
         return $task;
+    }
+
+    /**
+     * @throws TaskDeletingException
+     */
+    public function delete(int $id): void
+    {
+        $task = Task::where('id', $id)->first();
+
+        if (!$task) {
+            throw TaskDeletingException::taskNotExist();
+        }
+
+        $task->delete();
     }
 }

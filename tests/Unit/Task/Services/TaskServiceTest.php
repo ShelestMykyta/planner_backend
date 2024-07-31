@@ -4,6 +4,7 @@ namespace Tests\Unit\Task\Services;
 
 use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
+use App\Exceptions\Task\TaskDeletingException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
 use App\Services\Task\TaskService;
@@ -106,5 +107,41 @@ class TaskServiceTest extends TestCase
         );
 
         $updatedTask = $taskService->update($updateTask);
+    }
+
+    public function test_successful_delete_task(): void
+    {
+        $task = new Task();
+        $task->id = 2;
+        $task->title = 'Test Task';
+        $task->description = 'This is a test task';
+        $task->date = Carbon::create(2024, 2, 20);
+        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
+        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
+        $task->save();
+
+        $taskService = new TaskService();
+
+        $taskService->delete(2);
+
+        $this->assertDatabaseMissing('tasks', [
+            'id' => 2,
+            'title' => 'Test Task',
+            'description' => 'This is a test task',
+            'date' => '2024-02-20',
+            'start_time' => '09:00:00',
+            'end_time' => '10:00:00'
+        ]);
+    }
+
+    public function test_unsuccessful_delete_when_task_not_exist(): void
+    {
+        $this->expectException(TaskDeletingException::class);
+        $this->expectExceptionMessage('Task is not exist');
+        $this->expectExceptionCode(404);
+
+        $taskService = new TaskService();
+
+        $taskService->delete(3);
     }
 }
