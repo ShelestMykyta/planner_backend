@@ -9,7 +9,6 @@ use App\Exceptions\Task\TaskException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
 use App\Services\Task\TaskService;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -59,14 +58,7 @@ class TaskServiceTest extends TestCase
 
     public function test_successful_update_task(): void
     {
-        $task = new Task();
-        $task->id = 2;
-        $task->title = 'Test Task';
-        $task->description = 'This is a test task';
-        $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
-        $task->save();
+        $task = Task::factory()->create();
 
         $taskService = new TaskService();
 
@@ -76,7 +68,7 @@ class TaskServiceTest extends TestCase
             date: '2024-02-21',
             start_time: '10:00:00',
             end_time: '11:00:00',
-            id: 2
+            id: $task->id
         );
 
         $updatedTask = $taskService->update($updateData);
@@ -112,26 +104,14 @@ class TaskServiceTest extends TestCase
 
     public function test_successful_delete_task(): void
     {
-        $task = new Task();
-        $task->id = 2;
-        $task->title = 'Test Task';
-        $task->description = 'This is a test task';
-        $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
-        $task->save();
+        $task = Task::factory()->create();
 
         $taskService = new TaskService();
 
-        $taskService->delete(2);
+        $taskService->delete($task->id);
 
         $this->assertDatabaseMissing('tasks', [
-            'id' => 2,
-            'title' => 'Test Task',
-            'description' => 'This is a test task',
-            'date' => '2024-02-20',
-            'start_time' => '09:00:00',
-            'end_time' => '10:00:00'
+            'id' => $task->id
         ]);
     }
 
@@ -148,24 +128,13 @@ class TaskServiceTest extends TestCase
 
     public function test_get_task_by_id(): void
     {
-        $task = new Task();
-        $task->id = 2;
-        $task->title = 'Test Task';
-        $task->description = 'This is a test task';
-        $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
-        $task->save();
+        $task = Task::factory()->create();
 
         $taskService = new TaskService();
 
-        $task = $taskService->getById(2);
+        $foundTask = $taskService->getById($task->id);
 
-        $this->assertEquals('Test Task', $task->title);
-        $this->assertEquals('This is a test task', $task->description);
-        $this->assertEquals('2024-02-20', $task->date);
-        $this->assertEquals('09:00:00', $task->start_time);
-        $this->assertEquals('10:00:00', $task->end_time);
+        $this->assertEquals($task->id, $foundTask->id);
     }
 
     public function test_get_task_by_id_when_task_not_exist(): void

@@ -3,7 +3,6 @@
 namespace Tests\Feature\Task\Controllers;
 
 use App\Models\Task;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 use Throwable;
@@ -61,13 +60,7 @@ class TaskControllerTest extends TestCase
 
     public function test_update_task_endpoint_success_update(): void
     {
-        $task = new Task();
-        $task->title = 'Test Task';
-        $task->description = 'This is a test task';
-        $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime(Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime(Carbon::createFromFormat('H:i:s', '10:00:00'));
-        $task->save();
+        $task = Task::factory()->create();
 
         $response = $this->put('/api/tasks/' . $task->id, [
             'title' => 'Test Task',
@@ -82,13 +75,7 @@ class TaskControllerTest extends TestCase
 
     public function test_delete_task_endpoint_success_delete(): void
     {
-        $task = new Task();
-        $task->title = 'Test Task';
-        $task->description = 'This is a test task';
-        $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime(Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime(Carbon::createFromFormat('H:i:s', '10:00:00'));
-        $task->save();
+        $task = Task::factory()->create();
 
         $response = $this->delete('/api/tasks/' . $task->id);
 
@@ -97,13 +84,7 @@ class TaskControllerTest extends TestCase
 
     public function test_get_task_endpoint_success_get(): void
     {
-        $task = new Task();
-        $task->title = 'Test Task';
-        $task->description = 'This is a test task';
-        $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime(Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime(Carbon::createFromFormat('H:i:s', '10:00:00'));
-        $task->save();
+        $task = Task::factory()->create();
 
         $response = $this->get('/api/tasks/' . $task->id);
 
