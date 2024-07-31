@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
 use App\Exceptions\Task\TaskDeletingException;
+use App\Exceptions\Task\TaskException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Http\Requests\Task\CreateTaskRequest;
 use App\Http\Requests\Task\UpdateTaskRequest;
@@ -65,5 +66,15 @@ class TaskController extends Controller
         $this->taskService->delete($id);
 
         return response()->noContent();
+    }
+
+    /**
+     * @throws TaskException
+     */
+    public function get(int $id): TaskResource
+    {
+        $task = $this->taskService->getById($id);
+
+        return new TaskResource($task);
     }
 }

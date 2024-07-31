@@ -94,4 +94,19 @@ class TaskControllerTest extends TestCase
 
         $response->assertStatus(204);
     }
+
+    public function test_get_task_endpoint_success_get(): void
+    {
+        $task = new Task();
+        $task->title = 'Test Task';
+        $task->description = 'This is a test task';
+        $task->date = Carbon::create(2024, 2, 20);
+        $task->setStartTime(Carbon::createFromFormat('H:i:s', '09:00:00'));
+        $task->setEndTime(Carbon::createFromFormat('H:i:s', '10:00:00'));
+        $task->save();
+
+        $response = $this->get('/api/tasks/' . $task->id);
+
+        $response->assertStatus(200);
+    }
 }

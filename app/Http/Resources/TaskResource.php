@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\TimeHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,9 +19,9 @@ class TaskResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'description' => $this->description,
-            'date' => $this->date->format('Y-m-d'),
-            'start_time' => $this->start_time->format('H:i:s'),
-            'end_time' => $this->end_time->format('H:i:s'),
+            'date' => TimeHelper::transformStringToCarbon($this->date, 'Y-m-d'),
+            'start_time' => TimeHelper::transformStringToCarbon($this->start_time, 'H:i:s'),
+            'end_time' => TimeHelper::transformStringToCarbon($this->end_time, 'H:i:s'),
         ];
     }
 }

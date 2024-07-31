@@ -5,6 +5,7 @@ namespace Tests\Unit\Task\Services;
 use App\DTO\TaskDTO;
 use App\Exceptions\Task\TaskCreatingException;
 use App\Exceptions\Task\TaskDeletingException;
+use App\Exceptions\Task\TaskException;
 use App\Exceptions\Task\TaskUpdatingException;
 use App\Models\Task;
 use App\Services\Task\TaskService;
@@ -143,5 +144,38 @@ class TaskServiceTest extends TestCase
         $taskService = new TaskService();
 
         $taskService->delete(3);
+    }
+
+    public function test_get_task_by_id(): void
+    {
+        $task = new Task();
+        $task->id = 2;
+        $task->title = 'Test Task';
+        $task->description = 'This is a test task';
+        $task->date = Carbon::create(2024, 2, 20);
+        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
+        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
+        $task->save();
+
+        $taskService = new TaskService();
+
+        $task = $taskService->getById(2);
+
+        $this->assertEquals('Test Task', $task->title);
+        $this->assertEquals('This is a test task', $task->description);
+        $this->assertEquals('2024-02-20', $task->date);
+        $this->assertEquals('09:00:00', $task->start_time);
+        $this->assertEquals('10:00:00', $task->end_time);
+    }
+
+    public function test_get_task_by_id_when_task_not_exist(): void
+    {
+        $this->expectException(TaskException::class);
+        $this->expectExceptionMessage('Task is not exist');
+        $this->expectExceptionCode(404);
+
+        $taskService = new TaskService();
+
+        $taskService->getById(3);
     }
 }
