@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Helpers\TimeHelper;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class TaskResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'description' => $this->description,
+            'date' => TimeHelper::transformStringToCarbon($this->date, 'Y-m-d'),
+            'start_time' => TimeHelper::transformStringToCarbon($this->start_time, 'H:i:s'),
+            'end_time' => TimeHelper::transformStringToCarbon($this->end_time, 'H:i:s'),
+        ];
+    }
+}

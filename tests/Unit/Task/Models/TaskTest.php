@@ -1,9 +1,8 @@
 <?php
 
-namespace Tests\Unit;
+namespace Tests\Unit\Task\Models;
 
-use App\Exceptions\Task\TaskWrongEndTimeException;
-use App\Exceptions\Task\TaskWrongTimeNoEndTime;
+use App\Exceptions\Task\TaskTimeException;
 use App\Models\Task;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,8 +33,8 @@ class TaskTest extends TestCase
         $task->title = 'Test Task';
         $task->description = 'This is a test task';
         $task->date = Carbon::create(2024, 2, 20);
-        $task->setStartTime( Carbon::createFromFormat('H:i:s', '09:00:00'));
-        $task->setEndTime( Carbon::createFromFormat('H:i:s', '10:00:00'));
+        $task->setStartTime(Carbon::createFromFormat('H:i:s', '09:00:00'));
+        $task->setEndTime(Carbon::createFromFormat('H:i:s', '10:00:00'));
         $task->save();
 
         $this->assertDatabaseHas('tasks', [
@@ -49,7 +48,8 @@ class TaskTest extends TestCase
 
     public function test_create_task_with_start_and_wrong_finish(): void
     {
-        $this->expectException(TaskWrongEndTimeException::class);
+        $this->expectException(TaskTimeException::class);
+        $this->expectExceptionMessage('Finish time must be after start time');
 
         $task = new Task();
         $task->title = 'Test Task';
@@ -60,9 +60,11 @@ class TaskTest extends TestCase
         $task->save();
     }
 
-    public function test_create_task_with_no_start_and__finish(): void
+    public function test_create_task_with_no_start_and_finish(): void
     {
-        $this->expectException(TaskWrongEndTimeException::class);
+        $this->expectException(TaskTimeException::class);
+        $this->expectExceptionMessage('Wrong start time');
+        $this->expectExceptionCode(400);
 
         $task = new Task();
         $task->title = 'Test Task';
@@ -74,7 +76,9 @@ class TaskTest extends TestCase
 
     public function test_create_task_with_start_and_without_finish(): void
     {
-        $this->expectException(TaskWrongTimeNoEndTime::class);
+        $this->expectException(TaskTimeException::class);
+        $this->expectExceptionMessage('Wrong time input. No end time.');
+        $this->expectExceptionCode(400);
 
         $task = new Task();
         $task->title = 'Test Task';

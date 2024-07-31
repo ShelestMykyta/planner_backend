@@ -2,8 +2,7 @@
 
 namespace App\Models;
 
-use App\Exceptions\Task\TaskWrongEndTimeException;
-use App\Exceptions\Task\TaskWrongTimeNoEndTime;
+use App\Exceptions\Task\TaskTimeException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,11 +24,11 @@ class Task extends Model
         parent::boot();
         self::creating(function ($model) {
             if ($model->start_time && !$model->end_time) {
-                throw new TaskWrongTimeNoEndTime();
+                throw TaskTimeException::wrongTimeNoEndTime();
             }
             if ($model->start_time && $model->end_time) {
                 if ($model->end_time->lt($model->start_time)) {
-                    throw new TaskWrongEndTimeException();
+                    throw TaskTimeException::wrongEndTime();
                 }
             }
         });
@@ -40,10 +39,17 @@ class Task extends Model
         $this->start_time = $date;
     }
 
+    /**
+     * @throws TaskTimeException
+     */
     public function setEndTime(Carbon $date): void
     {
+        if (!isset($this->start_time)) {
+            throw TaskTimeException::wrongStartTime();
+        }
+
         if ($date->lt($this->start_time)) {
-            throw new TaskWrongEndTimeException();
+            throw TaskTimeException::wrongEndTime();
         }
         $this->end_time = $date;
     }

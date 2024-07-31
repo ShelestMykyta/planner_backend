@@ -16,3 +16,12 @@ use Illuminate\Support\Facades\Route;
 Route::get('/health-check', function () {
     return response()->json(['status' => 'ok']);
 });
+
+
+Route::prefix('tasks')->group(function () {
+    Route::get('/', [\App\Http\Controllers\TaskController::class, 'getAll']);
+    Route::get('/{id}', [\App\Http\Controllers\TaskController::class, 'get']);
+    Route::post('/', [\App\Http\Controllers\TaskController::class, 'create']);
+    Route::put('/{id}', [\App\Http\Controllers\TaskController::class, 'update']);
+    Route::delete('/{id}', [\App\Http\Controllers\TaskController::class, 'delete']);
+});
