@@ -17,6 +17,6 @@ class Desk extends Model
 
     public function tasks(): BelongsToMany
     {
-        return $this->belongsToMany(Task::class, 'tasks_descs');
+        return $this->belongsToMany(Task::class, 'tasks_desks');
     }
 }

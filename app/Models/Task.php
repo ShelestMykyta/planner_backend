@@ -20,9 +20,9 @@ class Task extends Model
         'end_time',
     ];
 
-    public function descs(): BelongsToMany
+    public function desks(): BelongsToMany
     {
-        return $this->belongsToMany(Desk::class, 'tasks_descs');
+        return $this->belongsToMany(Desk::class, 'tasks_desks');
     }
 
     public static function boot(): void
