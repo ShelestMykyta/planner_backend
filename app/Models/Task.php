@@ -6,6 +6,7 @@ use App\Exceptions\Task\TaskTimeException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Task extends Model
 {
@@ -18,6 +19,11 @@ class Task extends Model
         'start_time',
         'end_time',
     ];
+
+    public function desks(): BelongsToMany
+    {
+        return $this->belongsToMany(Desk::class, 'tasks_desks');
+    }
 
     public static function boot(): void
     {
